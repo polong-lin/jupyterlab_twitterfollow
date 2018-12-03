@@ -1,6 +1,10 @@
 # jupyterlab_twitterfollow
 
-Adds a Markdown cell into your notebook to let others follow you on Twitter
+**NOTE**: This extension is still **under development**.
+
+
+*Purpose of extension*
+Allows you to easily add Twitter follow buttons to each of your notebooks at the click of a button
 
 
 ## Prerequisites
@@ -29,4 +33,3 @@ To rebuild the package and the JupyterLab app:
 npm run build
 jupyter lab build
 ```
-
