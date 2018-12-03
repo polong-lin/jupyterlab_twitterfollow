@@ -1,10 +1,10 @@
-# jupyterlab_twitterfollow
+# jupyterlab_twitterfollow  
 
 **NOTE**: This extension is still **under development**.
 
 
-*Purpose of extension*
-Allows you to easily add Twitter follow buttons to each of your notebooks at the click of a button
+## What this extension does: 
+Allows you to easily add a Twitter follow button your notebook, by clicking on a button in the menu.
 
 
 ## Prerequisites
