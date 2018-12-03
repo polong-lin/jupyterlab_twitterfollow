@@ -42,7 +42,7 @@ export function codeCell(code: string) {
     return new CodeCellModel({
         cell: {
             cell_type: 'code',
-            metadata: { trusted: false, collapsed: false, tags: ['injected by PLUGIN'] },
+            metadata: { trusted: false, collapsed: false, tags: ['injected by twitterfollow'] },
             source: [code],
         },
     });
@@ -51,7 +51,6 @@ export function codeCell(code: string) {
 /**
  * A notebook widget extension that adds a button to the toolbar.
  */
-
 
 export
 class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
@@ -63,6 +62,7 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
   alt: string;
 
   getXkcdAPI() {
+    //fetch a random Xkcd comic
     fetch('https://egszlpbmle.execute-api.us-east-1.amazonaws.com/prod').then(response => {
       return response.json();
     }).then(data => {
@@ -71,34 +71,22 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
   }
 
   insertCode(panel: NotebookPanel, context: DocumentRegistry.IContext<INotebookModel>) {
-      //activecell = panel.content.activeCell
-      //panel.content.activeCell.model.value.text = 'mygoodness'
-      //console.log(activecell)
 
       const model = panel.content.model; // the notebook object
-      //let cellcounts = panel.content.cells.length // number of cells in notebook
       const activeCellIndex = panel.content.activeCellIndex; //index of actively selected cell
 
-      this.getXkcdAPI()
-      console.log(this.img)
+      this.getXkcdAPI() //fetch a comic
 
       if (this.img !== undefined) {
           let code = `<img src = ${this.img}>`
           const cell = codeCell(code);
-          model.cells.insert(activeCellIndex + 1, cell); // insert code into new cell below
+          model.cells.insert(activeCellIndex + 1, cell); //insert code into new cell below
           NotebookActions.selectBelow(panel.content) //select cell below
           NotebookActions.changeCellType(panel.content, 'markdown') //convert to markdown
-          NotebookActions.run(panel.content, context.session) //execute
+          NotebookActions.run(panel.content, context.session) //execute the cell
           NotebookActions.selectAbove(panel.content) //select cell above
-          //console.log(panel.content.activeCellIndex)
       }
-
-      //let code = codeapi.getimg()
-
-
-      //console.log(code)
-
-
+      
   }
 
   createNew(panel: NotebookPanel, context: DocumentRegistry.IContext<INotebookModel>) : IDisposable {
@@ -110,12 +98,12 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
     };
     let button = new ToolbarButton({
       className: 'myButton',
-      iconClassName: 'fa fa-fast-forward',
+      iconClassName: 'fa fa-twitter', // Twitter icon
       onClick: callback,
       tooltip: 'Run All'
     });
 
-    panel.toolbar.insertItem(0, 'runAll', button);
+    panel.toolbar.insertItem(10, 'runAll', button);
 
     return new DisposableDelegate(() => {
       button.dispose();
@@ -123,10 +111,11 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
 }
 }
 
+
 /**
  * Activate the extension.
  */
-function activate(app: JupyterLab) {
+function activate(app: JupyterLab, panel: NotebookPanel, context: DocumentRegistry.IContext<INotebookModel>) {
   app.docRegistry.addWidgetExtension('Notebook', new ButtonExtension());
 };
 
